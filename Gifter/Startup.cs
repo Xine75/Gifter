@@ -1,3 +1,4 @@
+using Gifter.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,7 @@ namespace Gifter
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddTransient<IPostRepository, PostRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
