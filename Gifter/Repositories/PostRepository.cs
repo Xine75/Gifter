@@ -28,33 +28,34 @@ namespace Gifter.Repositories
                        LEFT JOIN UserProfile up ON p.UserProfileId = up.id
               ORDER BY p.DateCreated";
 
-                    var reader = cmd.ExecuteReader();
-
-                    var posts = new List<Post>();
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        posts.Add(new Post()
+                        var posts = new List<Post>();
+                        while (reader.Read())
                         {
-                            Id = DbUtils.GetInt(reader, "PostId"),
-                            Title = DbUtils.GetString(reader, "Title"),
-                            Caption = DbUtils.GetString(reader, "Caption"),
-                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
-                            ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
-                            UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
-                            UserProfile = new UserProfile()
+                            posts.Add(new Post()
                             {
-                                Id = DbUtils.GetInt(reader, "UserProfileId"),
-                                Name = DbUtils.GetString(reader, "Name"),
-                                Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
-                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
-                            },
-                        });
+                                Id = DbUtils.GetInt(reader, "PostId"),
+                                Title = DbUtils.GetString(reader, "Title"),
+                                Caption = DbUtils.GetString(reader, "Caption"),
+                                DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
+                                ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                UserProfile = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                    Name = DbUtils.GetString(reader, "Name"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                    ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                                },
+                            });
+                        }
+
+                        reader.Close();
+
+                        return posts;
                     }
-
-                    reader.Close();
-
-                    return posts;
                 }
             }
         }
@@ -86,7 +87,10 @@ namespace Gifter.Repositories
                     {
                         var postId = DbUtils.GetInt(reader, "PostId");
 
+                        //first time through the loop, the list is empty
                         var existingPost = posts.FirstOrDefault(p => p.Id == postId);
+
+                        //the first time through the loop, it is null bc the list was empty
                         if (existingPost == null)
                         {
                             existingPost = new Post()
@@ -105,6 +109,7 @@ namespace Gifter.Repositories
                                     DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
                                     ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
                                 },
+                                //every post starts with an empty comments list
                                 Comments = new List<Comment>()
                             };
 
