@@ -66,5 +66,17 @@ namespace Gifter.Controllers
             return NoContent();
         }
 
+        //Get a single user with all their posts
+        [HttpGet("GetUserProfileByIdWithPosts/{id}")]
+        public IActionResult GetUserProfileByIdWithPosts(int id)
+        {
+            var user = _userProfileRepository.GetUserProfileByIdWithPosts(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
     }
 }
