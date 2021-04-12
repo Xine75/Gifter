@@ -6,6 +6,7 @@ export const PostProvider = (props) => {
     const [posts, setPosts] = useState([]);
 
     const getAllPosts = () => {
+        //the proxy that was set up in package.json will be handling the first part of the URL
         return fetch("/api/post")
             .then((res) => res.json())
             .then(setPosts);
