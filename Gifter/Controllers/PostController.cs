@@ -82,7 +82,7 @@ namespace Gifter.Controllers
             return Ok(_postRepository.Search(q, sortDesc));
         }
 
-        [HttpGet("searchForHottest")]
+        [HttpGet("hottest")]
         public IActionResult Search(DateTime dateTime)
         {
             return Ok(_postRepository.SearchforHottest(dateTime));
