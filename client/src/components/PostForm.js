@@ -1,22 +1,22 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { PostContext } from "../providers/PostProvider"
+import { PostContext } from "../providers/PostProvider";
+import PostList from "./PostList";
 
 export const PostForm = () => {
-    const { addPost } = useContext(PostContext);
-    const history = useHistory();
-    const timestamp = Date.now();
-    const postDate = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(timestamp);
+    const { addPost, getAllPosts } = useContext(PostContext);
+
 
 
     //----------------Setting State ----------------
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [post, setPost] = useState({
+        userProfileId: "",
         title: "",
         imageUrl: "",
         caption: "",
-        dateCreated: postDate
+
     })
 
     //-------------Saving User Input --------------
@@ -30,11 +30,17 @@ export const PostForm = () => {
     //-------------------save new post upon click event-------------
 
     const handleClickSavePost = (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        const newPost = { ...post }
-        addPost(newPost)
-            .then(() => history.push("/posts"))
+        e.preventDefault()
+        setIsLoading(true)
+
+        addPost({
+            userProfileId: post.userProfileId,
+            title: post.title,
+            imageUrl: post.imageUrl,
+            caption: post.caption,
+
+        })
+            .then(getAllPosts)
     }
 
 
@@ -46,6 +52,12 @@ export const PostForm = () => {
                 <h3 className="postForm__title">Add a Gif!</h3>
 
                 <br />
+                <fieldset>
+                    <div className="form-group">
+                        <label htmlFor="name">User Profile Id:</label>
+                        <input type="text" id="userProfileId" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="User ID" value={post.userProfileId} />
+                    </div>
+                </fieldset>
                 <fieldset>
                     <div className="form-group">
                         <label htmlFor="name">Gif Title:</label>

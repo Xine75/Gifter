@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./App.css";
 import { PostProvider } from "./providers/PostProvider";
 import { PostList } from "./components/PostList";
@@ -12,6 +13,9 @@ function App() {
         <PostList />
       </PostProvider>
     </div>
+
+
+
   );
 }
 
