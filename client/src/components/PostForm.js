@@ -70,3 +70,4 @@ export const PostForm = () => {
         </>
     )
 }
+export default PostForm;
