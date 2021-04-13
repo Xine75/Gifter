@@ -53,6 +53,8 @@ namespace Gifter.Controllers
         [HttpPost]
         public IActionResult Post(Post post)
         {
+            DateTime dateCreated = DateTime.Now;
+            post.DateCreated = dateCreated;
             _postRepository.Add(post);
             return CreatedAtAction("Get", new { id = post.Id }, post);
         }
@@ -82,7 +84,7 @@ namespace Gifter.Controllers
             return Ok(_postRepository.Search(q, sortDesc));
         }
 
-        [HttpGet("searchForHottest")]
+        [HttpGet("hottest")]
         public IActionResult Search(DateTime dateTime)
         {
             return Ok(_postRepository.SearchforHottest(dateTime));

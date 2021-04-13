@@ -28,3 +28,4 @@ export const PostProvider = (props) => {
         </PostContext.Provider>
     );
 };
+export default PostProvider;
