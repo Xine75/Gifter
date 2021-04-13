@@ -40,7 +40,16 @@ export const PostForm = () => {
             caption: post.caption,
 
         })
-            .then(getAllPosts)
+            .then(() => {
+                getAllPosts()
+                setPost({
+                    userProfileId: "",
+                    title: "",
+                    imageUrl: "",
+                    caption: "",
+
+                })
+            })
     }
 
 
