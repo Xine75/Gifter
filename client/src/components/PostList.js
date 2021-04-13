@@ -3,11 +3,23 @@ import { PostContext } from "../providers/PostProvider";
 import Post from "./Post";
 
 export const PostList = () => {
-    const { posts, getAllPosts } = useContext(PostContext);
+    const { posts, getAllPosts, searchTerms, searchPosts } = useContext(PostContext);
 
     useEffect(() => {
         getAllPosts();
     }, []);
+
+    // useEffect dependency array with dependencies - will run if dependency changes (state)
+    // searchTerms will cause a change
+
+    useEffect(() => {
+        if (searchTerms !== "") {
+            searchPosts(searchTerms)
+        } else {
+            getAllPosts()
+        }
+    }, [searchTerms])
+
 
     return (
         <div className="container">
