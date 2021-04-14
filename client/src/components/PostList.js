@@ -3,10 +3,11 @@ import { PostContext } from "../providers/PostProvider";
 import Post from "./Post";
 
 export const PostList = () => {
-    const { posts, getAllPosts, searchTerms, searchPosts } = useContext(PostContext);
+    const { posts, getAllPosts, searchTerms, searchPosts, getPostsWithComments } = useContext(PostContext);
 
     useEffect(() => {
-        getAllPosts();
+
+        getPostsWithComments();
     }, []);
 
     // useEffect dependency array with dependencies - will run if dependency changes (state)
@@ -16,7 +17,7 @@ export const PostList = () => {
         if (searchTerms !== "") {
             searchPosts(searchTerms)
         } else {
-            getAllPosts()
+            getPostsWithComments()
         }
     }, [searchTerms])
 
@@ -25,9 +26,10 @@ export const PostList = () => {
         <div className="container">
             <div className="row justify-content-center">
                 <div className="cards-column">
-                    {posts.map((post) => (
-                        <Post key={post.id} post={post} />
-                    ))}
+                    {posts.map((post) => {
+
+                        return <Post key={post.id} post={post} />
+                    })}
                 </div>
             </div>
         </div>

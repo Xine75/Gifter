@@ -4,7 +4,7 @@ import { PostContext } from "../providers/PostProvider";
 import PostList from "./PostList";
 
 export const PostForm = () => {
-    const { addPost, getAllPosts } = useContext(PostContext);
+    const { addPost, getAllPosts, getPostsWithComments } = useContext(PostContext);
 
 
 
@@ -16,6 +16,7 @@ export const PostForm = () => {
         title: "",
         imageUrl: "",
         caption: "",
+        comments: [],
 
     })
 
@@ -41,12 +42,14 @@ export const PostForm = () => {
 
         })
             .then(() => {
-                getAllPosts()
+                getPostsWithComments()
                 setPost({
                     userProfileId: "",
                     title: "",
                     imageUrl: "",
                     caption: "",
+                    comments: [],
+
 
                 })
             })

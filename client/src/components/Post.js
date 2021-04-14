@@ -11,6 +11,9 @@ const Post = ({ post }) => {
                     <strong>{post.title}</strong>
                 </p>
                 <p>{post.caption}</p>
+                <p>{post.comments.map(comment => {
+                    return <p>{comment.message}</p>
+                })}</p>
                 <p>{post.dateCreated}</p>
             </CardBody>
         </Card>

@@ -327,8 +327,11 @@ namespace Gifter.Repositories
 
                         up.Name, up.Bio, up.Email, up.DateCreated AS UserProfileDateCreated, 
                         up.ImageUrl AS UserProfileImageUrl
+
+                        c.Id AS CommentId, c.Message, c.UserProfileId AS CommentUserProfileId
                     FROM Post p 
                         LEFT JOIN UserProfile up ON p.UserProfileId = up.id
+                        LEFT JOIN Comment c on c.PostId = p.id
                     WHERE p.Title LIKE @Criterion OR p.Caption LIKE @Criterion";
 
                     if (sortDescending)
@@ -363,8 +366,22 @@ namespace Gifter.Repositories
                                 DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
                                 ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
                             },
+                            //every post starts with an empty comments list
+                            Comments = new List<Comment>()
+
                         });
+                        if (DbUtils.IsNotDbNull(reader, "CommentId"))
+                        {
+                            post.Comments.Add(new Comment()
+                            {
+                                Id = DbUtils.GetInt(reader, "CommentId"),
+                                Message = DbUtils.GetString(reader, "Message"),
+                                PostId = postId,
+                                UserProfileId = DbUtils.GetInt(reader, "CommentUserProfileId")
+                            });
+                        }
                     }
+
 
                     reader.Close();
 
