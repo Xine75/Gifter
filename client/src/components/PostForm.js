@@ -1,97 +1,80 @@
 import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import {
+    Form,
+    FormGroup,
+    Card,
+    CardBody,
+    Label,
+    Input,
+    Button,
+} from "reactstrap";
 import { PostContext } from "../providers/PostProvider";
-import PostList from "./PostList";
+import { useHistory } from "react-router-dom";
 
-export const PostForm = () => {
-    const { addPost, getAllPosts, getPostsWithComments } = useContext(PostContext);
+const PostForm = () => {
+    const { addPost } = useContext(PostContext);
+    const [userProfileId, setUserProfileId] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
+    const [title, setTitle] = useState("");
+    const [caption, setCaption] = useState("");
 
+    // Use this hook to allow us to programatically redirect users
+    const history = useHistory();
 
+    const submit = (e) => {
+        const post = {
+            imageUrl,
+            title,
+            caption,
+            userProfileId: +userProfileId,
+        };
 
-    //----------------Setting State ----------------
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [post, setPost] = useState({
-        userProfileId: "",
-        title: "",
-        imageUrl: "",
-        caption: "",
-        comments: [],
-
-    })
-
-    //-------------Saving User Input --------------
-
-    const handleControlledInputChange = (e) => {
-        const newPost = { ...post }
-        newPost[e.target.id] = e.target.value;
-        setPost(newPost);
-    }
-
-    //-------------------save new post upon click event-------------
-
-    const handleClickSavePost = (e) => {
-        e.preventDefault()
-        setIsLoading(true)
-
-        addPost({
-            userProfileId: post.userProfileId,
-            title: post.title,
-            imageUrl: post.imageUrl,
-            caption: post.caption,
-
-        })
-            .then(() => {
-                getPostsWithComments()
-                setPost({
-                    userProfileId: "",
-                    title: "",
-                    imageUrl: "",
-                    caption: "",
-                    comments: [],
-
-
-                })
-            })
-    }
-
-
-    //-------------------------JSX Add Post ----------------------
+        addPost(post).then((p) => {
+            // Navigate the user back to the home route
+            history.push("/");
+        });
+    };
 
     return (
-        <>
-            <form className="postForm">
-                <h3 className="postForm__title">Add a Gif!</h3>
+        <div className="container pt-4">
+            <div className="row justify-content-center">
+                <Card className="col-sm-12 col-lg-6">
+                    <CardBody>
+                        <Form>
+                            <FormGroup>
+                                <Label for="userId">User Id (For Now...)</Label>
+                                <Input
+                                    id="userId"
+                                    onChange={(e) => setUserProfileId(e.target.value)}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="imageUrl">Gif URL</Label>
+                                <Input
+                                    id="imageUrl"
+                                    onChange={(e) => setImageUrl(e.target.value)}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="title">Title</Label>
+                                <Input id="title" onChange={(e) => setTitle(e.target.value)} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for="caption">Caption</Label>
+                                <Input
+                                    id="caption"
+                                    onChange={(e) => setCaption(e.target.value)}
+                                />
+                            </FormGroup>
+                        </Form>
+                        <Button color="info" onClick={submit}>
+                            SUBMIT
+            </Button>
+                    </CardBody>
+                </Card>
+            </div>
+        </div>
+    );
+};
 
-                <br />
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="name">User Profile Id:</label>
-                        <input type="text" id="userProfileId" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="User ID" value={post.userProfileId} />
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="name">Gif Title:</label>
-                        <input type="text" id="title" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Title of Gif" value={post.title} />
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="name">Gif Url:</label>
-                        <input type="text" id="imageUrl" onChange={handleControlledInputChange} required className="form-control" placeholder="Paste Gif Url Here" value={post.imageUrl} />
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="name">Caption:</label>
-                        <input type="text" id="caption" onChange={handleControlledInputChange} required className="form-control" placeholder="Your Caption" value={post.caption} />
-                    </div>
-                </fieldset>
-                <button className="btn btn-info" disabled={isLoading} onClick={handleClickSavePost}>Add Post</button>
-
-            </form>
-        </>
-    )
-}
 export default PostForm;
