@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { PostContext } from "../providers/PostProvider"
 
 export const PostSearch = () => {
@@ -9,6 +9,8 @@ export const PostSearch = () => {
             Search Posts:
             <input type="text" className="input--wide"
                 onKeyUp={(e) => setSearchTerms(e.target.value)}
+
+
                 placeholder="Search for a Post..." />
 
 
@@ -16,3 +18,6 @@ export const PostSearch = () => {
     )
 }
 export default PostSearch;
+
+
+
